@@ -15,9 +15,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Checkstyle Шалгах
-        run: mvn checkstyle:check
-      - name: JUnit Тест ба JaCoCo Coverage Шалгах
-        run: mvn test jacoco:check
-      - name: JaCoCo Тайлан Үүсгэх
-        run: mvn jacoco:report
+          cache: 'maven'
+
+      # Checkstyle validate phase-д автоматаар явна, тиймээс шууд clean verify хангалттай
+      - name: Build + Tests + JaCoCo Check
+        run: mvn -B clean verify
+
+      # (Сонголт) тайланг artifact болгохыг хүсвэл:
+      - name: Generate JaCoCo HTML report
+        run: mvn -B jacoco:report
